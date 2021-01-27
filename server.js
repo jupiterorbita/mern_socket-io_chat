@@ -10,73 +10,93 @@ const server = app.listen(PORT, ()=> {
 });
 
 
-
 const sockets = require("socket.io");
 const io = sockets(server, {cors: true});
 
 var userObjects = []
-
-var animals = [
-  '🐪','🐫','🦙','🦘','🦥','🦨','🐘','🐁','🦔','🐇','🐿','🦎','🐊','🐢','🐍','🐐','🐑','🐏','🐖','🐄','🐃','🐂','🦛','🦏','🦌','🐎','🐆','🐅,','🐈','🐕','🐩','🐕‍🦺','🦮','🦧','🦍','🐒,','🐉','🦕','🦖','🦦','🦈','🐬','🐳','🐋','🐟','🐠','🐡','🦐','🦑','🐙','🦞','🦀','🦆','🐓','🦃','🦅','🦢','🦜','🦩','🦚','🦉','🐧','🦇','🦋','🐌','🐛','🐝','🐞','🦂','🕷'
-]
+var animals = ['🐪','🐫','🦙','🦘','🦥','🦨','🐘','🐁','🦔','🐇','🐿','🦎','🐊','🐢','🐍','🐐','🐑','🐏','🐖','🐄','🐃','🐂','🦛','🦏','🦌','🐎','🐆','🐅,','🐈','🐕','🐩','🐕‍🦺','🦮','🦧','🦍','🐒,','🐉','🦕','🦖','🦦','🦈','🐬','🐳','🐋','🐟','🐠','🐡','🦐','🦑','🐙','🦞','🦀','🦆','🐓','🦃','🦅','🦢','🦜','🦩','🦚','🦉','🐧','🦇','🦋','🐌','🐛','🐝','🐞','🦂','🕷'];
 var messageObjects = [];
 
-
-// ----- sockets transactions -----
+// =============== sockets transactions ==================
 io.on("connection", socket => {
   console.log('A client connected: ', socket.id);
 
-  if (!userObjects.includes(socket.id)) {
-    userObjects.push(socket.id)
-    io.emit("server-sends-new-user-event", {user_id : socket.id})
+    socket.on('join_room', (data) => {
+      // server gets data.userName and data.room
+      socket.join(data.room);
+      console.log(`${data.userName} joined room:`, data.room)
+      // give that user all the data of that room if it exits ???
+      // socket.emit('server says - heres your data', messageObjects)
 
-  }
+
+      // add new user to server userObjects array
+      if (!userObjects.includes(socket.id)) {
+        userObjects.push({
+          socket_id: socket.id,
+          userName: data.userName,
+          room: data.room
+        })
+      }
+
+      // give new user all chat data if in same room
+
+    })
+
+
+
+
+  // user joins for first time!
+  socket.on("CLIENT -> server - gimme data!", got_data => {
+    socket.emit('server says - heres your data', messageObjects)
+  })
 
     
     
-  
-    
-    
-    
-    
-
     // server listens for this event
     socket.on("event-from-client", data => {
-    console.log(socket.id, ' said: ', data.message)
+    const {room, content: {userName, newMessage} } = data;
 
-    // calc time stamp
-    var d = new Date();
-    var n = d.getTime();
-    const h = d.getHours()
-    const m = d.getMinutes()
-    const s = d.getSeconds()
-    console.log(`${h}:${m}:${s}`)
+    console.log('\n===========')
+    console.log(room, userName, newMessage)
+    console.log('\n===========')
+
+    // // timestamp
+    // var d = new Date();
+    // const h = d.getHours()
+    // const m = d.getMinutes()
+    // const s = d.getSeconds()
+    // console.log(`${h}:${m}:${s}`)
     
-
-
     messageObjects.push({
-      message: data.message,
+      room: data.room,
+      userName: data.content.userName,
+      message: data.content.newMessage,
       client_id: socket.id,
       dateSent : {
-        h,m,s
+        h:2,m:2,s:2
       }
     })
-    
 
-    console.log(messageObjects)
+    console.log('messageObjects = ', messageObjects)
+
+    let newMsgToSendToClient = {
+      userName: data.content.userName,
+      message: data.content.newMessage,
+      client_id: socket.id,
+      dateSent : {
+        h:2,m:2,s:2
+      }
+    }
     
-    
-    
-    
-    // server responds with this event
-    io.emit("server-sends-data-to-all-clients", messageObjects)
-    // io.emit("server-sends-data-to-all-clients", {
-      //   message: data.message, 
-      //   socket_id: socket.id,
-      //   time: {h,m,s}
-      // })
+    // !!!! SEND MESSAGES SPECIFICALLY TO A ROOM!!!!!
+    console.log('about to send new messages back')
+    io.to(data.room).emit('receive_message', newMsgToSendToClient)
+    console.log('dinished sending new messages back')
     })
     
+    socket.on('disconnect', ()=> {
+      console.log('USER DISCONNECTED')
+    })
 
   })
   // ----- END socket transactions -----

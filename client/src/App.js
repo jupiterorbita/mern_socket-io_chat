@@ -3,101 +3,85 @@ import {useState, useEffect} from 'react';
 import io from 'socket.io-client';
 
 function App() {
-  // create a place to hold socket var
   const [socket] = useState(()=> io(':1337'));
-  const [messages, setMessages] = useState([]);
-  const [timestamp, setTimestamp] = useState({
-      h: 1,
-      m: 2,
-      s: 3,
-    }
-  );
-  const [dataArrObj_from_server, setDataArrObj_from_server] = useState([])
 
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [room, setRoom] = useState('');
+  const [dataArrObj_from_server, setDataArrObj_from_server] = useState([])
   // client message:
   const [newMessage, setNewMessage] = useState("")
 
-  useEffect( ()=> {
-    // client listens for a socket response from server
-    socket.on("server-sends-data-to-all-clients", dataArr => {
-      console.log('SERVER >>> dataArr = ', dataArr)
-      // save timestamp to state
-      // setTimestamp({
-      //   h: data.time.h,
-      //   m: data.time.m,
-      //   s: data.time.s
-      // })
+  const connectToRoom = () => {
+    setLoggedIn(true)
+    socket.emit('join_room', {room, userName})
+  }
 
-      setDataArrObj_from_server(dataArr)
-
-      setMessages(prevMessage => {
-        // console.log(data.socket_id, 'said:', data.message)
-        // console.log('at', data.dateSent.h, data.dateSent.m, data.dateSent.s)
-        // return [data.message, ...prevMessage]
-      })
-
-      // console.log('data received by user:', data.socket_id)
-
-
-
-      return () => socket.disconnect(true);
+  // get all data upon login!
+  useEffect ( ()=> {
+    // gimme all data server
+    socket.emit("CLIENT -> server - gimme data!", {"can_i_has_data": true});
+    // wating for server to give us back data for all messages
+    socket.on('server says - heres your data', all_ze_messages => {
+      console.log('\n we got from server all_ze_messages \n', all_ze_messages)
+      // set all messages to be displayed upon arrival!
+      setDataArrObj_from_server(all_ze_messages)
     })
-
-
-
-
-
-    // if a new user connects:
-    socket.on("server-sends-new-user-event", new_user => {
-      console.log('a new user has joined!', new_user.user_id)
-    })
-
-
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect( ()=> {
     
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  }, [])
 
-  const formHandler = (e) =>{
+  socket.on("receive_message", dataArr => {
+    console.log('SERVER >>> dataArr = ', dataArr)
+    setDataArrObj_from_server([...dataArrObj_from_server, dataArr])
+  });
+    // useEffect ( () => {
+    //     return () => socket.disconnect(true);
+    //   })
+    // }, [])
+
+
+  const formHandler = async (e) =>{
     e.preventDefault()
-    if (newMessage === "" || newMessage.length < 1) {
-      return
-    }
-    socket.emit("event-from-client", {"message": newMessage});
-    return () => socket.disconnect(true);
-
+    if (newMessage === "" || newMessage.length < 1) return;
+    let messageContent = {
+      room,
+      content: {
+        userName,
+        newMessage
+      }}
+    await socket.emit("event-from-client", messageContent);
+    // return () => socket.disconnect(true);
   }
 
   return (
     <div className="App">
-
- 
-
-      <div className="msg-line">{dataArrObj_from_server.map((msg, i) => {
-        if (msg.client_id ) {
-
-        }
-        return <p key={i}>{msg.client_id} said: {msg.message} - {msg.dateSent.h}:{msg.dateSent.m}:{msg.dateSent.s}</p>
-      })}</div>
-      {/* <div className="msg-line">{messages.map((msg, i) => {
-        return <p key={i}>{msg} {timestamp.s} </p>
-      })}</div> */}
-
-
-
-      <div className="time-line"></div>
-
-
-      <form onSubmit={formHandler}>
-        <input onChange={e => {setNewMessage(e.target.value)} }type="text" />
-        <input type="submit" value="send 📩" />
-      </form>
-
-      <p>{JSON.stringify(dataArrObj_from_server)}</p>
+    {
+      !loggedIn ? (
+        <div className="logIn">
+            <div className="inputs">
+              <input type="text" placeholder="you name " onChange={e=> setUserName(e.target.value)} />
+              <input type="text" placeholder="secret room? " onChange={e=> setRoom(e.target.value)} />
+            </div>
+                <button onClick={connectToRoom}>Enter Chat</button>
+          </div>
+       ) : (
+        <div className="chatContainer"> 
+          <div className="msg-line">
+          {
+            dataArrObj_from_server.map((msg, i) => {
+            return <p key={i}>{msg.userName} said: {msg.message} - {msg.dateSent.h}:{msg.dateSent.m}:{msg.dateSent.s}</p>
+            })
+          }
+          </div>
+          <div className="time-line"></div>
+          <form onSubmit={formHandler}>
+            <input onChange={e => {setNewMessage(e.target.value)} }type="text" />
+            <input type="submit" value="send 📩" />
+          </form>
+          {JSON.stringify(dataArrObj_from_server)}
+        </div>
+      )
+    }
     </div>
   );
 }

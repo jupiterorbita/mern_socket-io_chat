@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -41,4 +41,77 @@
 .time-line {
   display: inline-block;
   vertical-align: top;
+} */
+
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* * {
+  outline: 1px solid red;
+} */
+.App {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background-color: rgb(194, 236, 236);
+}
+
+.logIn {
+  width: 600px;
+  height: 350px;
+  border: 4px solid blue;
+  border-radius: 10px;
+  background-color: #2a2730;
+  /* style the container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* stack on top of eachother */
+  flex-direction: column;
+  /* display: grid;
+  place-items: center; */
+}
+.logIn input {
+  margin: 10px;
+  width: 200px;
+  height: 40px;
+  border: 2px solid #0091ff;
+  border-radius: 7px;
+  background-color: transparent;
+  padding-left: 10px;
+  color: white;
+  font-size: 15;
+}
+.logIn input:focus {
+  outline: none;
+}
+.logIn button {
+  width: 200px;
+  height: 50px;
+  border: none;
+  background-color: #0091ff;
+  font-size: 16px;
+  color: white;
+  margin-top: 45px;
+}
+
+.logIn button:hover{
+  cursor: pointer;
+  background-color: #64bcff;
+}
+
+/* ============ chatting ============== */
+.chatContainer {
+  width: 600px;
+  height: 350px;
+  border: 5px solid #0091ff;
+  border-radius: 10px;
+  background-color: rgb(169, 230, 230);
+  /* style the container */
+  display: flex;
+  /* stack on top of eachother */
+  flex-direction: column;
 }
