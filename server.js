@@ -60,12 +60,12 @@ io.on("connection", socket => {
     console.log(room, userName, newMessage)
     console.log('\n===========')
 
-    // // timestamp
-    // var d = new Date();
-    // const h = d.getHours()
-    // const m = d.getMinutes()
-    // const s = d.getSeconds()
-    // console.log(`${h}:${m}:${s}`)
+    // timestamp
+    var d = new Date();
+    const h = d.getHours()
+    const m = d.getMinutes()
+    const s = d.getSeconds()
+    console.log(`${h}:${m}:${s}`)
     
     messageObjects.push({
       room: data.room,
@@ -73,7 +73,7 @@ io.on("connection", socket => {
       message: data.content.newMessage,
       client_id: socket.id,
       dateSent : {
-        h:2,m:2,s:2
+        h,m,s
       }
     })
 
@@ -84,7 +84,7 @@ io.on("connection", socket => {
       message: data.content.newMessage,
       client_id: socket.id,
       dateSent : {
-        h:2,m:2,s:2
+        h,m,s
       }
     }
     

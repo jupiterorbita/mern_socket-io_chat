@@ -30,19 +30,29 @@ function App() {
     
   }, [])
 
-  socket.on("receive_message", dataArr => {
-    console.log('SERVER >>> dataArr = ', dataArr)
-    setDataArrObj_from_server([...dataArrObj_from_server, dataArr])
-  });
-    // useEffect ( () => {
-    //     return () => socket.disconnect(true);
-    //   })
-    // }, [])
+  useEffect ( () => {
+    socket.on("receive_message", dataArr => {
+      console.log('SERVER >>> dataArr = ', dataArr)
+      setDataArrObj_from_server(prevStateData => {
+        return [...prevStateData, dataArr]
+      })
+      //scroll to the bottom of "#myDiv"
+        const myDiv = document.getElementById("scroll_down");
+        // console.log('myDiv', myDiv);
+        myDiv.scrollIntoView(false);
+    });
+    // return () => socket.disconnect(true);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+    
 
 
   const formHandler = async (e) =>{
     e.preventDefault()
-    if (newMessage === "" || newMessage.length < 1) return;
+    if (newMessage === "" || newMessage.length < 1) {
+      document.querySelector("input").focus();
+      return;
+    };
     let messageContent = {
       room,
       content: {
@@ -50,6 +60,8 @@ function App() {
         newMessage
       }}
     await socket.emit("event-from-client", messageContent);
+    setNewMessage('');
+    document.querySelector("input").focus();
     // return () => socket.disconnect(true);
   }
 
@@ -65,20 +77,51 @@ function App() {
                 <button onClick={connectToRoom}>Enter Chat</button>
           </div>
        ) : (
-        <div className="chatContainer"> 
-          <div className="msg-line">
+        <div className="wrapper">
+         <div className="logo"> </div>
+          <img src="./static/sm_logo.png" alt="animal chat" width="500" height="600"/>
+          <div className="chatContainer" id="scroll_down"> 
           {
             dataArrObj_from_server.map((msg, i) => {
-            return <p key={i}>{msg.userName} said: {msg.message} - {msg.dateSent.h}:{msg.dateSent.m}:{msg.dateSent.s}</p>
+            return (
+
+              <div key={i} className="wrapper-id" >
+                <div className="message_bubble" id={msg.userName === userName ? "You" : "Other"} >
+
+                  <div className="name"> 
+                    {msg.userName} 
+                  </div>
+                <div className="left">
+                  <div className="emoji"> 
+                  🐸
+                  </div>
+                  
+                </div>
+
+                <div className="right"> 
+                  <div className="actual_text_message"> 
+                    {msg.message}
+                  </div>
+                  
+                  <div className="time"> 
+                    {msg.dateSent.h}:{msg.dateSent.m}:{msg.dateSent.s}
+                  </div>
+                </div>
+                </div>
+              </div>
+            )
             })
           }
           </div>
-          <div className="time-line"></div>
-          <form onSubmit={formHandler}>
-            <input onChange={e => {setNewMessage(e.target.value)} }type="text" />
-            <input type="submit" value="send 📩" />
-          </form>
-          {JSON.stringify(dataArrObj_from_server)}
+
+          {/* FORM --------------------- */}
+          <div className="form">
+            <form onSubmit={formHandler}>
+              <input className='da_input' autoFocus onChange={e => {setNewMessage(e.target.value)} } value={newMessage} type="text" />
+              <input className="send_button" type="submit" value="send 📡" />
+            </form>
+          </div>
+          {/* {JSON.stringify(dataArrObj_from_server)} */}
         </div>
       )
     }
