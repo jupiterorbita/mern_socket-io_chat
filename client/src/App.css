@@ -124,7 +124,10 @@ div.users {
   color: white;
   border-radius: 10px;
   font-size: 23px;
-  /* min-height: 300px;
+  overflow: scroll;
+  scroll-behavior: smooth;
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  overflow-y: auto; /* min-height: 300px;
   max-height: 300px; */
 }
 div.wrapper {
