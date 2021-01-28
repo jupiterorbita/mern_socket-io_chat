@@ -1,5 +1,5 @@
 body * {
-  outline: 1px solid red;
+  /* outline: 1px solid red; */
 }
 body {
   padding: 0;
@@ -113,11 +113,17 @@ div.users {
   display: inline-block;
   /* outline: 10px solid lightseagreen; */
   vertical-align: top;
-  margin: 5px 5px 5px 5px;
-  width: 170px;
-  height: 515px;
-  padding: 15px 10px;
+  margin: 0px 5px 5px 5px;
+  width: 140px;
+  height: 510px;
+  padding: 20px 10px;
   border: 5px solid rgb(170, 106, 63);
+  background-image: url("../src/static/wood.jpg");
+  background-repeat: repeat;
+  background-size: 280px;
+  color: white;
+  border-radius: 10px;
+  font-size: 23px;
   /* min-height: 300px;
   max-height: 300px; */
 }
@@ -125,6 +131,12 @@ div.wrapper {
   vertical-align: top;
   display: inline-block;
   /* outline: 10px solid greenyellow; */
+}
+p.p_users {
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: black;
+  padding: 3px 1px;
 }
 /* LOGO */
 /* .logo {
@@ -266,10 +278,12 @@ div.wrapper {
   background-image: url("../src/static/log.svg");
   background-repeat: repeat;
   background-size: 400px;
-
+  width: 580px;
   padding: 20px;
   margin-top: 5px;
   border-radius: 10px;
+  /* margin: 0 auto; */
+  margin-left: 180px;
 }
 .form .da_input {
   width: 79%;

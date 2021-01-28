@@ -171,7 +171,17 @@ function App() {
           <img src={logo_img} className="main_logo" alt="animal chat" width="300" height="150" />
           <p className="room">room: {roomConnected}</p>
           <div>
-            <div className="users">users</div>
+            <div className="users">
+              users
+              <hr />
+              {usersConnected.map((u, i) => {
+                return (
+                  <p className="p_users" key={i}>
+                    {u.emoji} {u.userName}
+                  </p>
+                );
+              })}
+            </div>
             <div className="wrapper">
               {/* <div className="logo"> </div> */}
               {/* <p>users: {JSON.stringify(usersConnected)}</p> */}
@@ -216,9 +226,9 @@ function App() {
               <input className="send_button" type="submit" value="send 📡" />
             </form>
           </div>
+          {JSON.stringify(usersConnected)}
         </div>
       )}
-      {/* {JSON.stringify(dataArrObj_from_server)} */}
     </div>
   );
 }
