@@ -6,6 +6,6 @@
 
 v1.0
 
-#### disclaimer: AnimalJam(tm) and the AnimalJam logo are owned by WildWorks, Inc.
+#### Disclaimer: AnimalJam(tm) and the AnimalJam logo are owned by WildWorks, Inc.
 
 I have no affiliation with that company, I just used the assets as a theme 😊
