@@ -2,8 +2,10 @@ import "./App.css";
 import logo_img from "./static/sm_logo.png";
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
+const Filter = require("bad-words");
 
 function App() {
+  const filter = new Filter({ placeHolder: "🤐" });
   const [socket] = useState(() => io(":1337"));
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,7 +31,7 @@ function App() {
   // Join Room
   const loginHandler = (e) => {
     e.preventDefault();
-    if (!userName || userName.trim() === "" || userName.trim().length < 4 || userName.trim().length > 10 || userName === "") {
+    if (!userName || userName.trim() === "" || userName.trim().length < 4 || userName.trim().length > 10 || userName === "" || userNameErr) {
       return;
     } else {
       setLoggedIn(true);
@@ -45,19 +47,18 @@ function App() {
       setDataArrObj_from_server((prevData) => {
         return [...prevData, all_ze_messages];
       });
-      // setDataArrObj_from_server([...all_ze_messages]);
     });
     // announcement that someone joined!
-    socket.on("message_from_server", (serverAnnouncement) => {
+    socket.on("message_from_server", ({ message, dateSent }) => {
       setDataArrObj_from_server((prevData) => {
-        console.log(prevData);
+        console.log("someone joined! > prevData =", prevData);
         return [
           ...prevData,
           {
-            userName: "SERVER",
+            userName: "",
             emoji: "🌴",
-            message: serverAnnouncement.message,
-            dateSent: serverAnnouncement.dateSent,
+            message: message,
+            dateSent: dateSent,
           },
         ];
       });
@@ -70,11 +71,8 @@ function App() {
       setUsersConnected(users);
     });
     // get users disconnected from server
-    socket.on("disconnected_user", ({ user, dateSent }) => {
+    socket.on("disconnected_user", ({ user, dateSent, emoji }) => {
       console.log(`user: ${user} disconnected`);
-      // setDataArrObj_from_server((prevStateData) => {
-      //   return [...prevStateData, dataArr];
-      // });
       setDataArrObj_from_server((prevStateData) => {
         return [
           ...prevStateData,
@@ -82,8 +80,8 @@ function App() {
             client_id: "",
             dateSent,
             emoji: "❌",
-            message: `>> ${user} chased the sunset...`,
-            userName: "SERVER",
+            message: `${user} ${emoji} chased the sunset...`,
+            userName: "",
           },
         ];
       });
@@ -106,7 +104,8 @@ function App() {
       room,
       content: {
         userName,
-        newMessage,
+        newMessage: filter.clean(newMessage),
+        // newMessage,
       },
     };
     socket.emit("event-from-client", messageContent);
@@ -118,6 +117,8 @@ function App() {
   const onChangeName = (e) => {
     if (e.target.value === "") {
       setUserNameErr("");
+    } else if (filter.isProfane(e.target.value)) {
+      setUserNameErr("potty month! 😠");
     } else if (e.target.value.trim().length < 4 || e.target.value.trim().length > 10) {
       setUserNameErr("You name: 4 to 10 characters!");
     } else setUserNameErr("");
@@ -172,8 +173,8 @@ function App() {
           <p className="room">room: {roomConnected}</p>
           <div>
             <div className="users">
-              users
-              <hr />
+              {/* users
+              <hr /> */}
               {usersConnected.map((u, i) => {
                 return (
                   <p className="p_users" key={i}>
@@ -183,29 +184,31 @@ function App() {
               })}
             </div>
             <div className="wrapper">
-              {/* <div className="logo"> </div> */}
-              {/* <p>users: {JSON.stringify(usersConnected)}</p> */}
               <div className="chatContainer" id="scroll_down">
                 {dataArrObj_from_server.map((msg, i) => {
-                  return (
-                    <div key={i} className="wrapper-id">
-                      <div className="message_bubble" id={msg.userName === userName ? "You" : "Other"}>
-                        <div className="name">{msg.userName}</div>
-                        <div className="left">
-                          <div className="emoji">{msg.emoji}</div>
-                        </div>
-
-                        <div className="right">
-                          <div className="actual_text_message" style={msg.userName === "SERVER" ? { color: "red", fontWeight: "bold" } : {}}>
-                            {msg.message}
+                  if (msg.message === undefined) {
+                    return "";
+                  } else {
+                    return (
+                      <div key={i} className="wrapper-id">
+                        <div className="message_bubble" id={msg.userName === userName ? "You" : "Other"}>
+                          <div className="name">{msg.userName}</div>
+                          <div className="left">
+                            <div className="emoji">{msg.emoji}</div>
                           </div>
 
-                          <div className="time">{msg.dateSent}</div>
+                          <div className="right">
+                            <div className="actual_text_message" style={msg.userName === "" ? { color: "red", fontWeight: "bold" } : {}}>
+                              {msg.message}
+                            </div>
+
+                            <div className="time">{msg.dateSent}</div>
+                          </div>
                         </div>
+                        <div ref={messagesEndRef} />
                       </div>
-                      <div ref={messagesEndRef} />
-                    </div>
-                  );
+                    );
+                  }
                 })}
               </div>
             </div>
@@ -226,7 +229,7 @@ function App() {
               <input className="send_button" type="submit" value="send 📡" />
             </form>
           </div>
-          {JSON.stringify(usersConnected)}
+          {/* {JSON.stringify(usersConnected)} */}
         </div>
       )}
     </div>

@@ -133,9 +133,11 @@ div.wrapper {
   /* outline: 10px solid greenyellow; */
 }
 p.p_users {
-  border: 1px solid black;
+  border: 2px solid rgb(242, 188, 79);
   border-radius: 10px;
-  background-color: black;
+  /* background-color: black; */
+  /* background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12); */
+  background-image: linear-gradient(to bottom, #6e2d06, #7a3508, #873e0b, #93470d, #a0500f);
   padding: 3px 1px;
 }
 /* LOGO */

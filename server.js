@@ -57,14 +57,6 @@ var animals = [
   "🐬",
   "🐳",
   "🐋",
-  "🐟",
-  "🐠",
-  "🐡",
-  "🦐",
-  "🦑",
-  "🐙",
-  "🦞",
-  "🦀",
   "🦆",
   "🐓",
   "🦃",
@@ -125,21 +117,39 @@ io.on("connection", (socket) => {
 
     // Broadcast when a user connects
     socket.broadcast.to(user.room).emit("message_from_server", {
-      message: `>> ${user.userName} has joined the Jungle`,
+      message: `${user.userName} has joined the Jungle`,
       dateSent: getTimestamp(),
     });
 
     // socket.emit('server says - heres your data', messageObjects)
     // give to new user all data from same room
     if (messageObjects.filter((s) => s.room === room)) {
-      console.log("messageObjects.filter(s => s.room === room)");
-      console.log(messageObjects.filter((s) => s.room === room));
+      // console.log("messageObjects.filter(s => s.room === room)");
+      // console.log(messageObjects.filter((s) => s.room === room));
+
+      // if (messageObjects.length < 1) {
+      //   console.log("messageObjects is < 1!!! ⚠⚠⚠⚠⚠");
+      //   console.log(messageObjects);
+      //   // return;
+      // }
+      // if (messageObjects.length === []) {
+      //   console.log("messageObjects is < [  nothing!  ]");
+      //   console.log(messageObjects);
+      //   // return;
+      // }
 
       // return that rooms messages:
       const findThatRoomsMsgs = (room) => messageObjects.filter((s) => s.room === room);
+      console.log("🔎🔎 findThatRoomsMsgs() -> ", findThatRoomsMsgs);
       const giveNewUserRoomMessages = findThatRoomsMsgs(user.room);
-      // console.log('giveNewUserRoomMessages', giveNewUserRoomMessages)
+      console.log("🎈🎈🎈 giveNewUserRoomMessages", giveNewUserRoomMessages);
+
       io.to(user.room).emit("server says - heres your data", giveNewUserRoomMessages);
+      // if (giveNewUserRoomMessages.length < 1) {
+      //   return;
+      // } else {
+      //   io.to(user.room).emit("server says - heres your data", giveNewUserRoomMessages);
+      // }
     }
 
     // send users and room info:
@@ -193,7 +203,7 @@ io.on("connection", (socket) => {
 
     const user = userLeave(socket.id);
     if (user) {
-      io.to(user.room).emit("disconnected_user", { user: user.userName, dateSent: getTimestamp() });
+      io.to(user.room).emit("disconnected_user", { user: user.userName, dateSent: getTimestamp(), emoji: user.emoji });
 
       // send users and room info:
       const getRoomUsers = (room) => userObjects.filter((user) => user.room === room);
