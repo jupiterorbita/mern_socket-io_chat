@@ -62,16 +62,17 @@ body {
 .App {
   display: grid;
   place-items: center;
-  height: 100vh;
+  height: 70vh;
   /* background-color: rgb(194, 236, 236); */
 }
 
 .logIn {
   width: 600px;
   height: 350px;
-  border: 4px solid blue;
+  border: 10px solid rgb(119, 71, 24);
   border-radius: 10px;
-  background-color: #2a2730;
+  background-color: rgb(255, 95, 51);
+  background-image: url('./static/red_bg.svg');
   /* style the container */
   display: flex;
   align-items: center;
@@ -81,44 +82,92 @@ body {
   /* display: grid;
   place-items: center; */
 }
-.logIn input {
+.logIn .username {
   margin: 10px;
   width: 200px;
   height: 40px;
-  border: 2px solid #0091ff;
+  border: 2px solid rgb(236, 179, 68);
   border-radius: 7px;
-  background-color: transparent;
+  background-color: rgb(243, 224, 173);
   padding-left: 10px;
-  color: white;
-  font-size: 15;
+  color: rgb(136, 81, 51);
+  text-shadow: 3px 3px 5px white;
+  font-size: 22px;
+  caret-color: #b30000;
+  
 }
-.logIn input:focus {
+.logIn .username::placeholder {
+  text-shadow: 3px 3px 5px white;
+  font-size: 20px;
+}
+.logIn .username:focus {
   outline: none;
+  box-shadow: 1px 1px 30px rgb(248, 250, 161);
 }
-.logIn button {
-  width: 200px;
-  height: 50px;
-  border: none;
-  background-color: #0091ff;
-  font-size: 16px;
+input.button {
+  /* display: inline-block;
+  vertical-align: top; */
+  height: 60px;
+  width: 175px;
+  /* margin: 0 auto; */
+  color: #61432F;
+  font-size: 24px;
+  font-weight: bold;
+  background-image: linear-gradient(0deg, #cec688 0%, #fefae8 50%, #fefae8 85%, #fefefb 100%);
+  border: 3px solid #C6BC9D;
+  border-radius: 16px;
+  box-shadow: 2px 4px 0 0 rgb(0 0 0 / 20%);
+  padding: 0 10px;
+  margin-top: 20px;
+  margin-left: 100px;
+}
+span {
   color: white;
-  margin-top: 45px;
+  font-size: 22px;
+}
+.err {
+  position: absolute;
+  margin-top: -50px;
+  /* color already in html */
+  font-size: 25px;
+  text-shadow: 2px 2px 14px black;
 }
 
-.logIn button:hover{
+input.button:hover{
   cursor: pointer;
-  background-color: #64bcff;
+  background-color: #ffffff;
+  background-image: none;
+  /* border: 3px solid #ffffff; */
 }
 
+select {
+  background-color: #6fa058;
+  width: 100px;
+  height: 50px;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  border-radius: 15px;
+  border: 5px solid #61432F;
+}
+option{
+  background-color: #aac99b;
+  border-radius: 10px;
+}
 
 
 
 
 /* LOGO */
-.logo {
+/* .logo {
   background-image: url('../src/static/sm_logo.png');
   width: 50px;
   height: 30px;
+} */
+.main_logo {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 
 
@@ -126,11 +175,15 @@ body {
 
 /* ============ chatting ============== */
 .chatContainer {
-  width: 640px;
+  width: 610px;
   height: 550px;
-  border: 5px solid #0091ff;
+  /* border: 5px solid #0091ff; */
+  /* border: 5px solid rgb(254, 243, 190); */
+  border: 5px solid rgb(200, 221, 117);
   border-radius: 10px;
-  background-color: rgb(169, 230, 230);
+  /* background-color: rgb(169, 230, 230); */
+  /* background-color: rgb(216, 222, 152); */
+  background-color: rgb(137, 165, 91);
   /* style the container */
   /* display: flex; */
   /* stack on top of eachother */
@@ -163,11 +216,11 @@ body {
 #You{
   justify-content: flex-end;
   margin-left: 240px;
-  background-color: #d5f2fdea;
+  background-color: #f6fdd5;
 }
 #Other{
   justify-content: flex-start;
-  background-color: #7adf66a4;
+  background-color: #c6e9bf;
 }
 
 .msg-line * {
@@ -209,18 +262,20 @@ vertical-align: top;
 
 /* ======== scrollbar ============= */
 ::-webkit-scrollbar {
-  width: 20px;
+  width: 10px;
+  background-color: #d8a944;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
-  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgb(221, 143, 42); 
+  border-radius: 15px;
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: red; 
+  /* background: red;  */
+  background: rgb(250, 220, 124); 
   border-radius: 10px;
 }
 
@@ -241,7 +296,7 @@ vertical-align: top;
   border-radius: 10px;
 }
 .form .da_input {
-  width: 80%;
+  width: 79%;
   height: 30px;
   /* background-color: #8cca6f; */
   background-color: #6fa058;

@@ -1,104 +1,180 @@
 // io.emit emits an event to all connected clients
 // socket.broadcast.emit emits an event to all clients other than this particular one, referenced by the socket variable
 // socket.emit emits an event directly to this specific client
-const express = require('express');
+const express = require("express");
 const app = express();
-const PORT = 1337
+const PORT = 1337;
 
-const server = app.listen(PORT, ()=> {
+const server = app.listen(PORT, () => {
   console.log(`>> server on port: ${PORT} <<`);
 });
 
-
 const sockets = require("socket.io");
-const io = sockets(server, {cors: true});
+const io = sockets(server, { cors: true });
 
-var userObjects = []
-var animals = ['🐪','🐫','🦙','🦘','🦥','🦨','🐘','🐁','🦔','🐇','🐿','🦎','🐊','🐢','🐍','🐐','🐑','🐏','🐖','🐄','🐃','🐂','🦛','🦏','🦌','🐎','🐆','🐅,','🐈','🐕','🐩','🐕‍🦺','🦮','🦧','🦍','🐒,','🐉','🦕','🦖','🦦','🦈','🐬','🐳','🐋','🐟','🐠','🐡','🦐','🦑','🐙','🦞','🦀','🦆','🐓','🦃','🦅','🦢','🦜','🦩','🦚','🦉','🐧','🦇','🦋','🐌','🐛','🐝','🐞','🦂','🕷'];
+var userObjects = [];
+var animals = [
+  "🐪",
+  "🐫",
+  "🦙",
+  "🦘",
+  "🦥",
+  "🦨",
+  "🐘",
+  "🐁",
+  "🦔",
+  "🐇",
+  "🐿",
+  "🦎",
+  "🐊",
+  "🐢",
+  "🐍",
+  "🐐",
+  "🐑",
+  "🐏",
+  "🐖",
+  "🐄",
+  "🐃",
+  "🐂",
+  "🦛",
+  "🦏",
+  "🦌",
+  "🐎",
+  "🐆",
+  "🐅",
+  "🐈",
+  "🐩",
+  "🐕‍🦺",
+  "🦮",
+  "🦧",
+  "🦍",
+  "🐒",
+  "🐉",
+  "🦕",
+  "🦖",
+  "🦦",
+  "🦈",
+  "🐬",
+  "🐳",
+  "🐋",
+  "🐟",
+  "🐠",
+  "🐡",
+  "🦐",
+  "🦑",
+  "🐙",
+  "🦞",
+  "🦀",
+  "🦆",
+  "🐓",
+  "🦃",
+  "🦅",
+  "🦢",
+  "🦜",
+  "🦩",
+  "🦚",
+  "🦉",
+  "🐧",
+  "🦇",
+  "🦋",
+  "🐌",
+  "🐛",
+  "🐝",
+  "🐞",
+  "🦂",
+  "🕷",
+];
 var messageObjects = [];
 
+// timestamp
+const getTimestamp = () => {
+  var d = new Date();
+  const h = d.getHours();
+  const m = d.getMinutes();
+  const s = d.getSeconds();
+  return `${h}:${m}:${s}`;
+};
+
+const newEmoji = () => {
+  let animalArrLength = animals.length;
+  let randIdx = Math.floor(Math.random() * animalArrLength);
+  let thisNewUserEmoji = animals[randIdx];
+  console.log(thisNewUserEmoji);
+  return thisNewUserEmoji;
+};
+
 // =============== sockets transactions ==================
-io.on("connection", socket => {
-  console.log('A client connected: ', socket.id);
+io.on("connection", (socket) => {
+  console.log("A client connected: ", socket.id);
 
-    socket.on('join_room', (data) => {
-      // server gets data.userName and data.room
-      socket.join(data.room);
-      console.log(`${data.userName} joined room:`, data.room)
-      // give that user all the data of that room if it exits ???
-      // socket.emit('server says - heres your data', messageObjects)
+  socket.on("join_room", ({ room, userName }) => {
+    // save new user
+    const user = {
+      id: socket.id,
+      userName: userName,
+      room: room,
+      emoji: newEmoji(),
+    };
+    console.log("user", user);
+    // push to users array of obj
+    userObjects.push(user);
 
+    // make user join their room
+    socket.join(user.room);
+    console.log(`${user.userName} joined room:`, user.room);
 
-      // add new user to server userObjects array
-      if (!userObjects.includes(socket.id)) {
-        userObjects.push({
-          socket_id: socket.id,
-          userName: data.userName,
-          room: data.room
-        })
-      }
+    // Broadcast when a user connects
+    socket.broadcast.to(user.room).emit("message_from_server", {
+      message: `>> ${user.userName} has joined the Jungle`,
+      dateSent: getTimestamp(),
+    });
 
-      // give new user all chat data if in same room
+    // socket.emit('server says - heres your data', messageObjects)
+    // give to new user all data from same room
+    if (messageObjects.filter((s) => s.room === room)) {
+      console.log("messageObjects.filter(s => s.room === room)");
+      console.log(messageObjects.filter((s) => s.room === room));
 
-    })
-
-
-
-
-  // user joins for first time!
-  socket.on("CLIENT -> server - gimme data!", got_data => {
-    socket.emit('server says - heres your data', messageObjects)
-  })
-
-    
-    
-    // server listens for this event
-    socket.on("event-from-client", data => {
-    const {room, content: {userName, newMessage} } = data;
-
-    console.log('\n===========')
-    console.log(room, userName, newMessage)
-    console.log('\n===========')
-
-    // timestamp
-    var d = new Date();
-    const h = d.getHours()
-    const m = d.getMinutes()
-    const s = d.getSeconds()
-    console.log(`${h}:${m}:${s}`)
-    
-    messageObjects.push({
-      room: data.room,
-      userName: data.content.userName,
-      message: data.content.newMessage,
-      client_id: socket.id,
-      dateSent : {
-        h,m,s
-      }
-    })
-
-    console.log('messageObjects = ', messageObjects)
-
-    let newMsgToSendToClient = {
-      userName: data.content.userName,
-      message: data.content.newMessage,
-      client_id: socket.id,
-      dateSent : {
-        h,m,s
-      }
+      // return that rooms messages:
+      const findThatRoomsMsgs = (room) => messageObjects.filter((s) => s.room === room);
+      const giveNewUserRoomMessages = findThatRoomsMsgs(user.room);
+      // console.log('giveNewUserRoomMessages', giveNewUserRoomMessages)
+      io.to(user.room).emit("server says - heres your data", giveNewUserRoomMessages);
     }
-    
+  });
+
+  // server listens for this event
+  socket.on("event-from-client", ({ room, content: { userName, newMessage } }) => {
+    const findUserEmoji = (userName) => {
+      let userEmoji = userObjects.find((o) => o.userName === userName).emoji;
+      return userEmoji;
+    };
+
+    // server messages ALL
+    messageObjects.push({
+      room: room,
+      userName: userName,
+      message: newMessage,
+      client_id: socket.id,
+      emoji: findUserEmoji(userName),
+      dateSent: getTimestamp(),
+    });
+
+    // client specific messages
+    let newMsgToSendToClient = {
+      userName: userName,
+      message: newMessage,
+      client_id: socket.id,
+      emoji: findUserEmoji(userName),
+      dateSent: getTimestamp(),
+    };
+
     // !!!! SEND MESSAGES SPECIFICALLY TO A ROOM!!!!!
-    console.log('about to send new messages back')
-    io.to(data.room).emit('receive_message', newMsgToSendToClient)
-    console.log('dinished sending new messages back')
-    })
-    
-    socket.on('disconnect', ()=> {
-      console.log('USER DISCONNECTED')
-    })
+    io.to(room).emit("receive_message", newMsgToSendToClient);
+  });
 
-  })
-  // ----- END socket transactions -----
-  
-
+  socket.on("disconnect", () => {
+    console.log("USER DISCONNECTED", socket.id);
+  });
+});
+// ----- END socket transactions -----
