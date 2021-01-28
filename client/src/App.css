@@ -1,64 +1,19 @@
-/* .App {
-  text-align: center;
+body * {
+  outline: 1px solid red;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.msg-line,
-.time-line {
-  display: inline-block;
-  vertical-align: top;
-} */
-
 body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 
-  background-color: #DFC94F;
+  background-color: #dfc94f;
   /* background-image: url(//ajwebcdn1.akamaized.net/assets/2.0/site/overflow_pattern_tile-22395bd….svg); */
-  background-image: url('../src/static/bg.svg');
+  background-image: url("../src/static/bg.svg");
   background-repeat: repeat;
   background-size: 600px;
   padding: 0 50px;
 }
 
-/* * {
-  outline: 1px solid red;
-} */
 .App {
   display: grid;
   place-items: center;
@@ -72,7 +27,7 @@ body {
   border: 10px solid rgb(119, 71, 24);
   border-radius: 10px;
   background-color: rgb(255, 95, 51);
-  background-image: url('./static/red_bg.svg');
+  background-image: url("./static/red_bg.svg");
   /* style the container */
   display: flex;
   align-items: center;
@@ -94,7 +49,6 @@ body {
   text-shadow: 3px 3px 5px white;
   font-size: 22px;
   caret-color: #b30000;
-  
 }
 .logIn .username::placeholder {
   text-shadow: 3px 3px 5px white;
@@ -110,11 +64,11 @@ input.button {
   height: 60px;
   width: 175px;
   /* margin: 0 auto; */
-  color: #61432F;
+  color: #61432f;
   font-size: 24px;
   font-weight: bold;
   background-image: linear-gradient(0deg, #cec688 0%, #fefae8 50%, #fefae8 85%, #fefefb 100%);
-  border: 3px solid #C6BC9D;
+  border: 3px solid #c6bc9d;
   border-radius: 16px;
   box-shadow: 2px 4px 0 0 rgb(0 0 0 / 20%);
   padding: 0 10px;
@@ -133,7 +87,7 @@ span {
   text-shadow: 2px 2px 14px black;
 }
 
-input.button:hover{
+input.button:hover {
   cursor: pointer;
   background-color: #ffffff;
   background-image: none;
@@ -148,16 +102,30 @@ select {
   color: white;
   font-size: 20px;
   border-radius: 15px;
-  border: 5px solid #61432F;
+  border: 5px solid #61432f;
 }
-option{
+option {
   background-color: #aac99b;
   border-radius: 10px;
 }
-
-
-
-
+/* ==================================================== */
+div.users {
+  display: inline-block;
+  /* outline: 10px solid lightseagreen; */
+  vertical-align: top;
+  margin: 5px 5px 5px 5px;
+  width: 170px;
+  height: 515px;
+  padding: 15px 10px;
+  border: 5px solid rgb(170, 106, 63);
+  /* min-height: 300px;
+  max-height: 300px; */
+}
+div.wrapper {
+  vertical-align: top;
+  display: inline-block;
+  /* outline: 10px solid greenyellow; */
+}
 /* LOGO */
 /* .logo {
   background-image: url('../src/static/sm_logo.png');
@@ -169,9 +137,19 @@ option{
   margin: 0 auto;
   margin-bottom: 20px;
 }
-
-
-
+/* rooms */
+.room {
+  background-color: red;
+  width: fit-content;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border: 5px solid saddlebrown;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-image: url("./static/red_bg.svg");
+  color: white;
+  font-size: 22px;
+}
 
 /* ============ chatting ============== */
 .chatContainer {
@@ -201,24 +179,24 @@ option{
 /* message bubble */
 .message_bubble {
   margin: 5px;
-	/* position: relative; */
+  /* position: relative; */
   width: 20em;
   /* width: 300px; */
-	/* display: flex; */
+  /* display: flex; */
   background-color: #fff;
   /* background-color: #0091ff; */
-	padding: 0.1em 1em;
-	font-size: 1em;
-	border-radius: .75rem;
-  box-shadow:	0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
+  padding: 0.1em 1em;
+  font-size: 1em;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
 }
 
-#You{
+#You {
   justify-content: flex-end;
   margin-left: 240px;
   background-color: #f6fdd5;
 }
-#Other{
+#Other {
   justify-content: flex-start;
   background-color: #c6e9bf;
 }
@@ -229,16 +207,14 @@ option{
 
 .left,
 .right {
-display: inline-block;
-vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
 .left {
   width: 50px;
-
 }
 .right {
   width: 270px;
-
 }
 
 .left .emoji {
@@ -254,7 +230,7 @@ vertical-align: top;
   /* background-color: red; */
 }
 
-.time{
+.time {
   /* background-color: blueviolet; */
   text-align: right;
   font-size: 11px;
@@ -268,26 +244,26 @@ vertical-align: top;
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgb(221, 143, 42); 
+  box-shadow: inset 0 0 5px rgb(221, 143, 42);
   border-radius: 15px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
   /* background: red;  */
-  background: rgb(250, 220, 124); 
+  background: rgb(250, 220, 124);
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #b30000; 
+  background: #b30000;
 }
 
 .form {
   /* background-color: rgb(50, 207, 155); */
-  background-color: #DFC94F;
-  background-image: url('../src/static/log.svg');
+  background-color: #dfc94f;
+  background-image: url("../src/static/log.svg");
   background-repeat: repeat;
   background-size: 400px;
 
@@ -305,7 +281,7 @@ vertical-align: top;
   font-size: 18px;
   text-shadow: 2px 2px 4px black;
 }
-.da_input:focus{
+.da_input:focus {
   outline: none;
 }
 .send_button {
@@ -317,11 +293,11 @@ vertical-align: top;
   color: white;
   font-size: 17px;
 }
-.send_button:hover{
+.send_button:hover {
   background-color: rgb(62, 123, 236);
   cursor: pointer;
 }
-.send_button:active{
-  background-color:red;
+.send_button:active {
+  background-color: red;
   outline: none;
 }

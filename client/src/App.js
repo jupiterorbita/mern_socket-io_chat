@@ -10,6 +10,10 @@ function App() {
   const [userName, setUserName] = useState("");
   const [userNameErr, setUserNameErr] = useState("");
   const [room, setRoom] = useState("");
+
+  const [usersConnected, setUsersConnected] = useState([]);
+  const [roomConnected, setRoomConnected] = useState("");
+
   // const [emoji, setEmoji] = useState('🦄');
   const [dataArrObj_from_server, setDataArrObj_from_server] = useState([
     {
@@ -54,6 +58,32 @@ function App() {
             emoji: "🌴",
             message: serverAnnouncement.message,
             dateSent: serverAnnouncement.dateSent,
+          },
+        ];
+      });
+    });
+    // get room and users connected from server
+    socket.on("roomUsers", ({ room, users }) => {
+      console.log("we are in room:", room);
+      console.log(`users connected to ${room} = `, users);
+      setRoomConnected(room);
+      setUsersConnected(users);
+    });
+    // get users disconnected from server
+    socket.on("disconnected_user", ({ user, dateSent }) => {
+      console.log(`user: ${user} disconnected`);
+      // setDataArrObj_from_server((prevStateData) => {
+      //   return [...prevStateData, dataArr];
+      // });
+      setDataArrObj_from_server((prevStateData) => {
+        return [
+          ...prevStateData,
+          {
+            client_id: "",
+            dateSent,
+            emoji: "❌",
+            message: `>> ${user} chased the sunset...`,
+            userName: "SERVER",
           },
         ];
       });
@@ -137,31 +167,38 @@ function App() {
           </div>
         </div>
       ) : (
-        <div className="wrapper">
-          <div className="logo"> </div>
+        <div>
           <img src={logo_img} className="main_logo" alt="animal chat" width="300" height="150" />
-          <div className="chatContainer" id="scroll_down">
-            {dataArrObj_from_server.map((msg, i) => {
-              return (
-                <div key={i} className="wrapper-id">
-                  <div className="message_bubble" id={msg.userName === userName ? "You" : "Other"}>
-                    <div className="name">{msg.userName}</div>
-                    <div className="left">
-                      <div className="emoji">{msg.emoji}</div>
-                    </div>
+          <p className="room">room: {roomConnected}</p>
+          <div>
+            <div className="users">users</div>
+            <div className="wrapper">
+              {/* <div className="logo"> </div> */}
+              {/* <p>users: {JSON.stringify(usersConnected)}</p> */}
+              <div className="chatContainer" id="scroll_down">
+                {dataArrObj_from_server.map((msg, i) => {
+                  return (
+                    <div key={i} className="wrapper-id">
+                      <div className="message_bubble" id={msg.userName === userName ? "You" : "Other"}>
+                        <div className="name">{msg.userName}</div>
+                        <div className="left">
+                          <div className="emoji">{msg.emoji}</div>
+                        </div>
 
-                    <div className="right">
-                      <div className="actual_text_message" style={msg.userName === "SERVER" ? { color: "red", fontWeight: "bold" } : {}}>
-                        {msg.message}
+                        <div className="right">
+                          <div className="actual_text_message" style={msg.userName === "SERVER" ? { color: "red", fontWeight: "bold" } : {}}>
+                            {msg.message}
+                          </div>
+
+                          <div className="time">{msg.dateSent}</div>
+                        </div>
                       </div>
-
-                      <div className="time">{msg.dateSent}</div>
+                      <div ref={messagesEndRef} />
                     </div>
-                  </div>
-                  <div ref={messagesEndRef} />
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           {/* FORM --------------------- */}

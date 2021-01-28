@@ -141,6 +141,13 @@ io.on("connection", (socket) => {
       // console.log('giveNewUserRoomMessages', giveNewUserRoomMessages)
       io.to(user.room).emit("server says - heres your data", giveNewUserRoomMessages);
     }
+
+    // send users and room info:
+    const getRoomUsers = (room) => userObjects.filter((user) => user.room === room);
+    io.to(user.room).emit("roomUsers", {
+      room: user.room,
+      users: getRoomUsers(user.room),
+    });
   });
 
   // server listens for this event
@@ -175,6 +182,26 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("USER DISCONNECTED", socket.id);
+
+    // send user that disconnect :
+    const userLeave = (id) => {
+      const index = userObjects.findIndex((user) => user.id === id);
+      if (index !== -1) {
+        return userObjects.splice(index, 1)[0];
+      }
+    };
+
+    const user = userLeave(socket.id);
+    if (user) {
+      io.to(user.room).emit("disconnected_user", { user: user.userName, dateSent: getTimestamp() });
+
+      // send users and room info:
+      const getRoomUsers = (room) => userObjects.filter((user) => user.room === room);
+      io.to(user.room).emit("roomUsers", {
+        room: user.room,
+        users: getRoomUsers(user.room),
+      });
+    }
   });
 });
 // ----- END socket transactions -----
