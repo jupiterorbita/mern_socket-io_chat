@@ -92,6 +92,7 @@ function App() {
         return [...prevStateData, dataArr];
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formHandler = (e) => {
@@ -137,6 +138,11 @@ function App() {
     scrollToBottom();
   }, [dataArrObj_from_server]);
 
+  // const goBack = () => {
+  //   // setLoggedIn(false);
+  //   window.location.reload();
+  // };
+
   return (
     <div className="App">
       {!loggedIn ? (
@@ -165,12 +171,22 @@ function App() {
               </div>
               <input type="submit" value="Enter Chat" className="button" />
             </form>
+            <p className="disclaimer">RULES: BE RESPECTFUL, BE KIND, HAVE FUN 😊 </p>
           </div>
+          <p className="copy">
+            {/* DISCLAIMER: <br />
+            ANIMALJAM&trade; and the AminalJam&reg; logo are owned by WildWorks, Inc. &copy; 2017 
+            <br />*/}
+            Student Project by John Williams 🎈 2021
+          </p>
         </div>
       ) : (
         <div>
           <img src={logo_img} className="main_logo" alt="animal chat" width="300" height="150" />
-          <p className="room">room: {roomConnected}</p>
+          <p className="show-room">room: {roomConnected}</p>
+          {/* <p onClick={goBack} className="exit-room">
+            👈 back
+          </p> */}
           <div>
             <div className="users">
               {/* users

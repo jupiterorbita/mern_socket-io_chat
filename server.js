@@ -124,20 +124,6 @@ io.on("connection", (socket) => {
     // socket.emit('server says - heres your data', messageObjects)
     // give to new user all data from same room
     if (messageObjects.filter((s) => s.room === room)) {
-      // console.log("messageObjects.filter(s => s.room === room)");
-      // console.log(messageObjects.filter((s) => s.room === room));
-
-      // if (messageObjects.length < 1) {
-      //   console.log("messageObjects is < 1!!! ⚠⚠⚠⚠⚠");
-      //   console.log(messageObjects);
-      //   // return;
-      // }
-      // if (messageObjects.length === []) {
-      //   console.log("messageObjects is < [  nothing!  ]");
-      //   console.log(messageObjects);
-      //   // return;
-      // }
-
       // return that rooms messages:
       const findThatRoomsMsgs = (room) => messageObjects.filter((s) => s.room === room);
       console.log("🔎🔎 findThatRoomsMsgs() -> ", findThatRoomsMsgs);
@@ -145,11 +131,6 @@ io.on("connection", (socket) => {
       console.log("🎈🎈🎈 giveNewUserRoomMessages", giveNewUserRoomMessages);
 
       io.to(user.room).emit("server says - heres your data", giveNewUserRoomMessages);
-      // if (giveNewUserRoomMessages.length < 1) {
-      //   return;
-      // } else {
-      //   io.to(user.room).emit("server says - heres your data", giveNewUserRoomMessages);
-      // }
     }
 
     // send users and room info:

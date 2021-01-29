@@ -108,6 +108,22 @@ option {
   background-color: #aac99b;
   border-radius: 10px;
 }
+
+.disclaimer {
+  background-color: #aac99b;
+  /* color: white; */
+  padding: 3px;
+}
+
+.copy {
+  background-color: rgb(68, 91, 42);
+  text-align: center;
+  border: 1px solid #61432f;
+  border-radius: 10px;
+  color: white;
+  padding: 5px;
+}
+
 /* ==================================================== */
 div.users {
   display: inline-block;
@@ -155,7 +171,8 @@ p.p_users {
   margin-bottom: 20px;
 }
 /* rooms */
-.room {
+.show-room {
+  /* display: inline-block; */
   background-color: red;
   width: fit-content;
   margin: 0 auto;
@@ -166,6 +183,21 @@ p.p_users {
   background-image: url("./static/red_bg.svg");
   color: white;
   font-size: 22px;
+}
+
+.exit-room {
+  background-color: red;
+  display: inline-block;
+  font-size: 22px;
+  margin-top: 0px;
+  margin-left: 45px;
+  padding: 10px;
+  border: 3px solid rgb(134, 68, 24);
+  border-radius: 10px;
+  background-color: #93470d;
+  background-image: url("https://ajwebcdn1.akamaized.net/assets/2.0/site/nav_bar_wood_grain_tile-15e4cc4617a9e49a3d3a84bb179ceda94d55496ef2034289396b2db7fe934c10.svg");
+  color: white;
+  cursor: pointer;
 }
 
 /* ============ chatting ============== */
@@ -206,6 +238,7 @@ p.p_users {
   font-size: 1em;
   border-radius: 0.75rem;
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 #You {
@@ -226,6 +259,7 @@ p.p_users {
 .right {
   display: inline-block;
   vertical-align: top;
+  z-index: 1;
 }
 .left {
   width: 50px;
@@ -244,6 +278,12 @@ p.p_users {
   vertical-align: top; */
 }
 .actual_text_message {
+  z-index: -1;
+  /* hyphens: auto; */
+  /* word-break: break-all; */
+  word-break: break-word;
+  white-space: pre-wrap;
+  text-overflow: ellipsis;
   /* background-color: red; */
 }
 
