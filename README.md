@@ -1,4 +1,4 @@
-![](preview.png)
+![](preview2.png)
 
 ## Fun with animals chatting app
 
