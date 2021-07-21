@@ -2,10 +2,10 @@ import "./App.css";
 import logo_img from "./static/sm_logo.png";
 import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
-const Filter = require("bad-words");
+const Filter = require("bad-words"); // maybe comment it out
 
 function App() {
-  const filter = new Filter({ placeHolder: "🤐" });
+  const filter = new Filter({ placeHolder: "🤐" }); // maybe comment it out
   const [socket] = useState(() => io(":1337"));
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -105,7 +105,7 @@ function App() {
       room,
       content: {
         userName,
-        newMessage: filter.clean(newMessage),
+        newMessage: filter.clean(newMessage), // maybe comment it out
         // newMessage,
       },
     };
@@ -118,7 +118,7 @@ function App() {
   const onChangeName = (e) => {
     if (e.target.value === "") {
       setUserNameErr("");
-    } else if (filter.isProfane(e.target.value)) {
+    } else if (filter.isProfane(e.target.value)) { // maybe comment it out
       setUserNameErr("potty month! 😠");
     } else if (e.target.value.trim().length < 4 || e.target.value.trim().length > 10) {
       setUserNameErr("Your name: 4 to 10 characters!");
