@@ -49,6 +49,8 @@ body {
   text-shadow: 3px 3px 5px white;
   font-size: 22px;
   caret-color: #b30000;
+  transition: 200ms;
+
 }
 .logIn .username::placeholder {
   text-shadow: 3px 3px 5px white;
@@ -74,6 +76,8 @@ input.button {
   padding: 0 10px;
   margin-top: 20px;
   margin-left: 100px;
+  /* transition: 200ms; */
+
 }
 span {
   color: white;
@@ -91,6 +95,7 @@ input.button:hover {
   cursor: pointer;
   background-color: #ffffff;
   background-image: none;
+  transition: 200ms;
   /* border: 3px solid #ffffff; */
 }
 

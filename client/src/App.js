@@ -121,7 +121,7 @@ function App() {
     } else if (filter.isProfane(e.target.value)) {
       setUserNameErr("potty month! 😠");
     } else if (e.target.value.trim().length < 4 || e.target.value.trim().length > 10) {
-      setUserNameErr("You name: 4 to 10 characters!");
+      setUserNameErr("Your name: 4 to 10 characters!");
     } else setUserNameErr("");
     setUserName(e.target.value);
   };
@@ -177,7 +177,8 @@ function App() {
             {/* DISCLAIMER: <br />
             ANIMALJAM&trade; and the AminalJam&reg; logo are owned by WildWorks, Inc. &copy; 2017 
             <br />*/}
-            Student Project by John Williams 🎈 2021
+            ⭐ Sockets.io example ⭐
+            {/* Sockets.io example by <a href="https://github.com/jupiterorbita">John Misirlakis </a>🎈 2020 */}
           </p>
         </div>
       ) : (
